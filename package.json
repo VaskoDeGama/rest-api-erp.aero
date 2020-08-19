@@ -1,0 +1,25 @@
+{
+  "name": "rest-api-erp.aero",
+  "version": "1.0.0",
+  "description": "rest api with bearer token, on express and mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VaskoDeGama/rest-api-erp.aero.git"
+  },
+  "keywords": [
+    "express",
+    "mysql",
+    "rest",
+    "api"
+  ],
+  "author": "VaskaDeGama (karmenyuk@yandex.ru)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VaskoDeGama/rest-api-erp.aero/issues"
+  },
+  "homepage": "https://github.com/VaskoDeGama/rest-api-erp.aero#readme"
+}
