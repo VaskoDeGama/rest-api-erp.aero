@@ -4,7 +4,8 @@
   "description": "rest api with bearer token, on express and mysql",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "PORT=5000 nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/VaskoDeGama/rest-api-erp.aero/issues"
   },
-  "homepage": "https://github.com/VaskoDeGama/rest-api-erp.aero#readme"
+  "homepage": "https://github.com/VaskoDeGama/rest-api-erp.aero#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.3.4"
+  }
 }
