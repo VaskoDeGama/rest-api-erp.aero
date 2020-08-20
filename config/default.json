@@ -4,7 +4,7 @@
     "port": "3306",
     "password": "14171417",
     "username": "root",
-    "database": "aero",
+    "baseName": "aero",
     "dialect": "mysql"
   }
 }
