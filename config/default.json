@@ -6,5 +6,7 @@
     "username": "root",
     "baseName": "aero",
     "dialect": "mysql"
-  }
+  },
+  "JWT_SECRET": "very secret string",
+  "JWT_REFRESH_SECRET": "very secret refresh string"
 }

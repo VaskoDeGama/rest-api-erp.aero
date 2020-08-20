@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const { signupValidators } = require("../utils/validators");
 const User = require("../models/User");
+const { getAccessToken, getRefreshToken } = require("../utils/tokenService");
 
 const router = Router();
 
@@ -22,10 +23,13 @@ router.post("/", signupValidators, async (req, res) => {
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const result = await User.create({ id: id, password: hashPassword });
+    const access_token = getAccessToken(result);
+    const refresh_token = getRefreshToken(result);
     return res.status(201).json({
       status: true,
       message: "User successful created",
-      userId: result.id,
+      access_token,
+      refresh_token,
     });
   } catch (e) {
     console.log(e);

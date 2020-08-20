@@ -28,7 +28,10 @@ exports.signinValidators = [
     .withMessage("Please enter a valid email")
     .custom(async (value) => {
       try {
-        const user = await User.findOne({ where: { id: value } });
+        const user = await User.findOne({
+          attributes: ["id"],
+          where: { id: value },
+        });
         if (!user) {
           return Promise.reject("User with this email does not exist");
         }
