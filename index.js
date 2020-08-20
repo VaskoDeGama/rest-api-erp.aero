@@ -6,6 +6,11 @@ const path = require("path");
 
 const database = require("./utils/database");
 
+const indexRoute = require("./routes/index");
+const infoRoute = require("./routes/info");
+const signinRoute = require("./routes/signin");
+const signupRoute = require("./routes/signup");
+
 const server = express();
 const PORT = process.env.PORT || 3000;
 
@@ -15,16 +20,19 @@ server.use(express.json());
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.urlencoded({ extended: false }));
 
+server.use("/", indexRoute);
+server.use("/info", infoRoute);
+server.use("/signin", signinRoute);
+server.use("/signup", signupRoute);
+
 server.use((req, res) => {
-  res.status(200).json({
-    status: "I am alive",
-  });
+  res.status(404).json({ status: false, message: "Invalid request" });
 });
 
 function start() {
   try {
     database
-      .authenticate()
+      .sync()
       .then(console.log("Database has been connected successful."))
       .catch((e) => console.error("Unable to connect to the database:", e));
     server.listen(PORT, () => {
