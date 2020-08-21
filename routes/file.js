@@ -137,4 +137,52 @@ router.get("/download/:id", tokenVerify, async (req, res) => {
   }
 });
 
+router.put(
+  "/update/:id",
+  tokenVerify,
+  fileUploader.single("file"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          status: false,
+          message: "No file",
+        });
+      }
+      const file = await File.findOne({
+        where: {
+          id: req.params.id,
+        },
+      });
+      if (!file) {
+        return res
+          .status(401)
+          .json({ status: false, message: "File not found" });
+      } else {
+        const file_exist = fs.existsSync(`./public/uploads/${file.name}`);
+        if (!file_exist) {
+          return res
+            .status(401)
+            .json({ status: false, message: "File not found" });
+        }
+        fs.unlinkSync(`./public/uploads/${file.name}`);
+        file.name = req.file.filename;
+        file.type = req.file.mimetype;
+        file.extension = path.extname(req.file.originalname);
+        file.size = req.file.size;
+        file.uploadAt = new Date().toISOString().slice(0, 19).replace("T", " ");
+        file.save().then((response) => {
+          return res.status(200).json({
+            status: true,
+            message: "A file successful uploaded",
+            response,
+          });
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 module.exports = router;
