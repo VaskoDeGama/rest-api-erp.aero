@@ -11,6 +11,7 @@ const indexRoute = require("./routes/index");
 const infoRoute = require("./routes/info");
 const signinRoute = require("./routes/signin");
 const signupRoute = require("./routes/signup");
+const logoutRoute = require("./routes/logout");
 
 const server = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ server.use("/", indexRoute);
 server.use("/info", infoRoute);
 server.use("/signin", signinRoute);
 server.use("/signup", signupRoute);
+server.use("/logout", logoutRoute);
 
 server.use((req, res) => {
   res.status(404).json({ status: false, message: "Invalid request" });
