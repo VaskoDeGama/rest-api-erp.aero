@@ -3,7 +3,11 @@ const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 const { signinValidators } = require("../utils/validators");
-const { getRefreshToken, getAccessToken } = require("../utils/tokenService");
+const {
+  getRefreshToken,
+  getAccessToken,
+  renewToken,
+} = require("../utils/tokenService");
 
 const router = Router();
 
@@ -29,9 +33,9 @@ router.post("/", signinValidators, async (req, res) => {
         candidate.password
       );
       if (areSame) {
-        const access_token = getAccessToken(candidate);
-        const refresh_token = getRefreshToken(candidate);
-        return res.status(200).json({
+        const access_token = getAccessToken(candidate.id);
+        const refresh_token = getRefreshToken(candidate.id);
+        return res.status(200).cookie("refresh_token", refresh_token).json({
           status: true,
           message: "Successful authorization",
           access_token,
@@ -51,6 +55,22 @@ router.post("/", signinValidators, async (req, res) => {
 
 router.post("/new_token", async (req, res) => {
   try {
+    const refreshToken = req.cookies.refresh_token;
+    if (!refreshToken) {
+      return res.status(403).json({
+        status: false,
+        message: "Access is forbidden, no refresh token",
+      });
+    } else {
+      renewToken(refreshToken).then(({ access_token, refresh_token }) => {
+        return res.status(200).cookie("refresh_token", refresh_token).json({
+          status: true,
+          message: "Successful renew token",
+          access_token,
+          refresh_token,
+        });
+      });
+    }
   } catch (e) {
     console.log(e);
   }

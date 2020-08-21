@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const path = require("path");
 
@@ -16,6 +17,7 @@ const PORT = process.env.PORT || 3000;
 
 server.use(logger("dev"));
 server.use(cors());
+server.use(cookieParser());
 server.use(express.json());
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.urlencoded({ extended: false }));

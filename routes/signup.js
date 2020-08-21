@@ -25,7 +25,7 @@ router.post("/", signupValidators, async (req, res) => {
     const result = await User.create({ id: id, password: hashPassword });
     const access_token = getAccessToken(result);
     const refresh_token = getRefreshToken(result);
-    return res.status(201).json({
+    return res.status(201).cookie("refresh_token", refresh_token).json({
       status: true,
       message: "User successful created",
       access_token,
