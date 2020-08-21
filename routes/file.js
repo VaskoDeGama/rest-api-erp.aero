@@ -50,7 +50,6 @@ router.post(
 router.get("/list", tokenVerify, async (req, res) => {
   try {
     const { list_size, page } = req.body;
-    console.log(list_size, page);
     File.findAndCountAll({
       limit: list_size ? list_size : 10,
       offset: page ? (page - 1) * list_size : 0,
@@ -90,6 +89,27 @@ router.delete("/delete/:id", tokenVerify, async (req, res) => {
       .catch((err) => {
         return res.status(401).json({ status: false, message: err });
       });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.get("/:id", tokenVerify, async (req, res) => {
+  try {
+    const file = await File.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!file) {
+      return res.status(401).json({ status: false, message: "File not found" });
+    } else {
+      return res.status(200).json({
+        status: true,
+        message: "A file info",
+        file,
+      });
+    }
   } catch (e) {
     console.log(e);
   }
