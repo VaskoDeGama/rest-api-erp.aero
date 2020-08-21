@@ -115,4 +115,26 @@ router.get("/:id", tokenVerify, async (req, res) => {
   }
 });
 
+router.get("/download/:id", tokenVerify, async (req, res) => {
+  try {
+    const file = await File.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!file) {
+      return res.status(401).json({ status: false, message: "File not found" });
+    } else {
+      return res
+        .status(200)
+        .download(
+          `./public/uploads/${file.name}`,
+          `${file.name.split("_")[1]}`
+        );
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 module.exports = router;
