@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const path = require("path");
+const fs = require("fs");
 const tokenVerify = require("../middleware/tokenVerify");
 const fileUploader = require("../utils/fileUploader");
 const File = require("../models/File");
@@ -62,6 +63,33 @@ router.get("/list", tokenVerify, async (req, res) => {
         ...response,
       });
     });
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+router.delete("/delete/:id", tokenVerify, async (req, res) => {
+  try {
+    const file_id = req.params.id;
+    const file = await File.findOne({
+      where: { id: file_id },
+    });
+    if (!file) {
+      return res.status(401).json({ status: false, message: "File not found" });
+    }
+    const file_exist = fs.existsSync(`./public/uploads/${file.name}`);
+    if (!file_exist) {
+      return res.status(401).json({ status: false, message: "File not found" });
+    }
+    fs.unlinkSync(`./public/uploads/${file.name}`);
+    file
+      .destroy()
+      .then(() => {
+        return res.status(200).json({ status: true, message: "File deleted" });
+      })
+      .catch((err) => {
+        return res.status(401).json({ status: false, message: err });
+      });
   } catch (e) {
     console.log(e);
   }
